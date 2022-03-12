@@ -1,6 +1,8 @@
 //Importamos librerias
 const express = require('express')
 const expressLayouts = require('express-ejs-layouts')
+const bodyParser = require('body-parser')
+
 const app = express()
 
 const mongoose = require('mongoose')
@@ -16,11 +18,11 @@ app.set('layout', 'layouts/layout')     // Directorio de plantillas (Header y Fo
 
 app.use(expressLayouts)                 // LLamar a la dependencia de manejo de plantillas con ejs
 app.use(express.static('public'))       // Directorio de los archivos estaticos css,js,img
+app.use(bodyParser.urlencoded({ limit: '10mb', extended:false })) //configurar el urlencoded para capturar datos del formulario
+app.use(express.json())
 
 // Conectando a la Base de Datos
-mongoose.connect(process.env.DATABASE_URL, {
-    // useNewUrlParser: true
-})
+mongoose.connect(process.env.DATABASE_URL)
 const db = mongoose.connection
 db.on('error', error => console.error(error))
 db.once('open', () => console.log('Connected to Mongoose'))
