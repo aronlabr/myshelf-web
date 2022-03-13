@@ -1,5 +1,5 @@
 <div>
-    <label>´Titulo</label>
+    <label>Titulo</label>
     <input type="text" name="title" value="<%= book.title %>">
 </div>
 <div>
@@ -16,7 +16,7 @@
 </div>
 <div>
     <label>Fecha de Publicación</label>
-    <input type="date" name="publishedDate" value="<%= book.publishDate==null ? '': book.publishDate.toISOString().split('T')[0] %>">
+    <input type="date" name="publishDate" value="<%= book.publishDate==null ? '': book.publishDate.toISOString().split('T')[0] %>">
     <!-- book.publishedDate : 2022-03-02T22:23 ==> date: 2022-03-02 -->
 </div>
 <div>
@@ -25,7 +25,7 @@
 </div>
 <div>
     <label>Cover</label>
-    <input type="file" name="cover" value="">
+    <input type="file" name="cover" class="filepond">
 </div>
 <div>
     <label>Description</label>
