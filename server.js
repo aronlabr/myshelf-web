@@ -1,6 +1,7 @@
 //Importamos librerias
 const express = require('express')
 const expressLayouts = require('express-ejs-layouts')
+const methodOverride = require('method-override')
 
 const app = express()
 
@@ -13,12 +14,13 @@ if (process.env.NODE_ENV !== 'production') {
 
 app.set('view engine', 'ejs')           // Motor de plantillas
 app.set('views', __dirname + '/views')  // Directorio de las vistas
-app.set('layout', 'layouts/layout')     // Directorio de plantillas (Header y Footer)
+app.set('layout', 'layouts/layout')     // Directorio de plantillas
 
 app.use(expressLayouts)                 // LLamar a la dependencia de manejo de plantillas con ejs
 app.use(express.static('public'))       // Directorio de los archivos estaticos css,js,img
 app.use(express.urlencoded({ limit: '10mb', extended:false })) //configurar el urlencoded para capturar datos del formulario
 app.use(express.json())
+app.use(methodOverride('_method'))
 
 // Conectando a la Base de Datos
 mongoose.connect(process.env.DATABASE_URL)
