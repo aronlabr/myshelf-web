@@ -55,16 +55,23 @@ router.post('/', async (req, res) => {
     }
 })
 
-async function renderNewPage(res, book, hasError = false){
+async function renderFormPage(res, book, form, hasError) {
     try {
         const authors = await Author.find({})
-        const book = new Book()
         const params = { authors:authors, book:book}
-        if (hasError) params.errorMessage = 'Error Creating Book'
-        res.render('books/new', params)
+        if (hasError) {
+            (form === 'new')
+                ? params.errorMessage = 'Error Creating Book'
+                : params.errorMessage = 'Error Editing Book'
+        }
+        res.render(`books/${form}`, params)
     } catch {
         res.redirect('books')
     }
+}
+
+async function renderNewPage(res, book, hasError = false){
+    renderFormPage(res, book, 'new', hasError)
 }
 
 function saveCover(book, coverEncoded) {
@@ -75,5 +82,73 @@ function saveCover(book, coverEncoded) {
         book.coverImageType = cover.type
     }
 }
+
+// Show Book Router
+router.get('/:id', async (req, res) => {
+    try {
+        const book = await Book.findById(req.params.id)
+                                .populate('author')
+                                .exec()
+        res.render('books/show',{
+            book: book
+        })
+    } catch {
+        res.redirect('/')
+    }
+})
+
+// Edit Book Router
+router.get('/:id/edit', async (req, res) => {
+    try {
+        const book = await Book.findById(req.params.id).exec()
+        renderEditPage(res, book)
+    } catch {
+        res.redirect('/')
+    }
+})
+
+async function renderEditPage(res, book, hasError = false) {
+    renderFormPage(res, book, 'edit', hasError)
+}
+
+// Update Book Router
+router.put('/:id', async (req, res) => {
+    let book
+    try {
+        book = await Book.findById(req.params.id)
+        book.title = req.body.title
+        book.author = req.body.author
+        book.publishDate = new Date(req.body.publishDate)
+        book.pageCount = req.body.pageCount
+        book.description = req.body.description
+        if (req.body.cover != null && req.body.cover !== '') {
+            saveCover(book, req.body.cover)
+        }
+        await book.save()
+        res.redirect(`books`)
+    } catch (err) {
+        console.error(err)
+        if (book != null) {
+            renderEditPage(res, book, true)
+        } else {
+            res.redirect('/')
+        }
+    }
+})
+
+// Delete Book Router
+router.delete('/:id', async (req, res) => {
+    let book
+    try {
+        book = await Book.findById(req.params.id)
+        await book.remove()
+        res.redirect('/books')
+    } catch {
+        if (book == null) {
+            res.redirect('/')
+        }
+        res.redirect(`/books/${book.id}`)
+    }
+})
 
 module.exports = router
