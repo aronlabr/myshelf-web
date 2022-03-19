@@ -2,6 +2,15 @@
 @import 'shared/variables.css';
 @import 'shared/header.css';
 @import 'shared/buttons.css';
+@import 'shared/form.css';
+@import 'shared/author.css';
+@import './shared/book.css';
+
+:root {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 20px;
+    color: var(--color-text-light);
+}
 
 * {
     margin: 0;
@@ -10,12 +19,6 @@
 
 *, *::before, *::after {
     box-sizing: border-box;
-}
-
-:root {
-    font-family: 'Fredoka', sans-serif;
-    font-size: 20px;
-    color: var(--color-text-light);
 }
 
 html {
@@ -34,4 +37,14 @@ body {
 
 .inner-container {
     margin: 0 2rem;
+}
+
+.page-header {
+    font-size: 2rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+}
+
+.error-message {
+    color: hsl(var(--color-danger-hue), 100%, 50%);
 }
