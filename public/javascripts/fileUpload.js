@@ -4,7 +4,7 @@ if (rootStyles.getPropertyValue('--book-cover-width-large') != null &&
     rootStyles.getPropertyValue('--book-cover-width-large') != '') {
     ready()
 } else {
-    window.addEventlistener('load', ready)
+    window.onload = () => ready()
 }
 function ready() {
     const coverwidth = parseFloat(rootStyles.getPropertyValue('--book-cover-width-large'))
